@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<table class="table table-striped">
+	{% set displayOrder = ['givenname','surname','email','telephone','gender','dob',
+		'billto_address1','billto_city','billto_postalcode','billto_state',
+		'shipto_address1','shipto_city','shipto_postalcode','shipto_state','region'] %}
+    {% for item in displayOrder %}
+    <tr><th>{{item}}</th><th>{{user_dict[item]}}</th><th>
+    {% endfor %}
+</table>
+
+{% endblock %}

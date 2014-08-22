@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block body %}
+<h2>Top Selling Melons</h2>
+
+           
+<div id="melon-list">
+    {% for melon in melon_list %}
+    <div class="melon-summary well">
+        <h2><a href="/melon/{{melon.id}}">{{melon.common_name}}</a></h2>
+        <a href="/melon/{{melon.id}}">
+        <img src="{{melon.imgurl}}">
+        </a>
+        <h3>{{melon.price_str()}}</h3>
+        <a class="btn btn-primary" href="/melon/{{melon.id}}">Details</a>
+    </div>
+    {% endfor %}
+</div>
+
+<div id= "blackout-screen" class = "blackout-screen">
+        <div id = "promotion" class = "jumbotron">
+            <h1>Save on Watermelons! All watermelons 50% off!</h1>
+            <a id="close-promotion" href = ""> Close this window</a>
+        </div>
+</div> 
+
+<div id = "drop-cart-container">
+        <div id = "cart-target">
+         </div>
+         <a id = "cart-close" href="" class = "btn btn-xs btn-default">Close Cart</a>
+</div>
+
+<script type="text/javascript">
+
+    function showCartSummary(data) {
+        var showCart = $("div#drop-cart-container");
+        var injectionPlace = $("div#cart-target");
+        console.log(showCart)
+        injectionPlace.html(data);
+        showCart.show();
+    }
+
+    function hideBlackoutScreen() {
+        var blackout = $("div.blackout-screen");
+        blackout.hide();
+        return false;
+    }
+
+    function getCartContents() {
+        $.get("/cart_items", showCartSummary)
+    }
+
+    function main() {
+         var closeLink = $("a#close-promotion");
+         closeLink.click(hideBlackoutScreen);
+
+         var hoverCart = $("a#melonCart");
+         hoverCart.mouseover(getCartContents);
+
+    }
+    
+    $(main);
+
+</script>
+
+
+
+
+{% endblock %}

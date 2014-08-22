@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="/static/css/style.css" />
+        <!-- need this for jQuery to work -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <img src="/static/img/ubermelonsmall.png"><a class="navbar-brand" href="/">Ubermelon</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a id="myMelonCart" href="/cart"><img class="melon-cart" src="/static/img/watermelon.png"> My Melon Cart</a></li>
+                        {% if session['customer'] %}
+                            <li><a href="/user">Hi, {{session['customer'][1]}}</a></li>
+                            <li><a href="/logout">Log out</a></li>
+                        {% else %}
+                            <li><a href="/login">Log In</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            <ul class="flashes">
+                <li>{{message}}</li>
+            </ul>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            {% block body %}{% endblock %}
+        </div>
+
+        <div id="dropdown-cart" class="dropdown-cart">
+            <div id="cart-target">
+            </div>
+            <a id="cart-close" class="btn btn-xs btn-default" href="">Close</a>
+        </div>
+
+        <script language="javascript" type="text/javascript">
+
+            function getCartContents() {
+                $.get("/cart_items", showCartSummary)
+            }
+
+            function showCartSummary(data) {
+                var content = $("div#cart-target");
+                content.html(data);
+                var showCart = $("div#dropdown-cart");
+                showCart.show();
+            }
+
+            function hideCartSummary() {
+                var hideCart = $("div#dropdown-cart");
+                hideCart.hide();
+                return false;
+            }
+
+            function hideBlackoutScreen() {
+                // javascript:
+                // var blackout = document.querySelector("div#blackout-screen");
+                // blackout.style.visibility = "hidden";
+                // jQuery:
+                var blackout = $("div#blackout-screen");
+                blackout.hide();
+                return false;
+            }
+
+            function main() {
+
+                hideCartSummary();
+                // javascript:
+                // var closeLink = document.querySelector("a#close-promotion");
+                // closeLink.onclick = hideBlackoutScreen;
+                // jQuery:
+                var closeLink = $("a#close-promotion");
+                closeLink.click(hideBlackoutScreen);
+
+                var hoverToShow = $("a#myMelonCart");
+                hoverToShow.mouseover(getCartContents);
+
+                var hoverClose = $("a#cart-close");
+                hoverClose.click(hideCartSummary);
+
+            }
+
+            $(main);
+
+        </script>
+    </body>
+</html>

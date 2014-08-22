@@ -1,0 +1,11 @@
+<div>
+	{% if session.get('all_melon_dict') %}
+		{% set melon_dict = session['all_melon_dict'] %}
+		{% for melon_id in melon_dict %}
+	    <p>{{melon_dict[melon_id][1]}}</p>
+	    <p>Qty: {{melon_dict[melon_id][0]}}</p>
+	    {% endfor %}
+	{% else %}
+		<p>Your cart is empty</p> 
+	{% endif %}
+</div>
